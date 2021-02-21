@@ -33,32 +33,35 @@ namespace WebApplication1.Hubs
 
         public void MakeMove(int x, int y, string gameName)
         {
-            CrossesModel currGame = GetGameByName(gameName);
-            var id = Context.ConnectionId;
-            var opponentId = id == currGame.zeroId ? currGame.crossId : currGame.zeroId;
-            System.Diagnostics.Debug.WriteLine(opponentId);
-            int[] moveResult = currGame.MakeMove(Context.ConnectionId, x, y);
-            if (moveResult[0] != 0)
+            try
             {
-                System.Diagnostics.Debug.WriteLine(moveResult[1]);
-                if (moveResult[1] < 0)
-                {                    
+                CrossesModel currGame = GetGameByName(gameName);
+                var id = Context.ConnectionId;
+                var opponentId = id == currGame.zeroId ? currGame.crossId : currGame.zeroId;
+                System.Diagnostics.Debug.WriteLine(opponentId);
+                int[] moveResult = currGame.MakeMove(Context.ConnectionId, x, y);
+                if (moveResult[0] != 0)
+                {
+                    System.Diagnostics.Debug.WriteLine(moveResult[1]);
                     string point = x.ToString() + ',' + y.ToString();
-                    Clients.Client(opponentId).AddMove(point, currGame.zerosMove);
-                    Clients.Caller.AddMove(point, currGame.zerosMove);
-                    
-                }
-                else if (moveResult[1] == 0)
-                {
-                    Clients.Caller.FinishGame("Draw");
-                    Clients.User(opponentId).FinishGame("Draw");
-                }
-                else
-                {
-                    Clients.Caller.FinishGame("You win");
-                    Clients.User(opponentId).FinishGame("You lose");
+                    if (moveResult[1] < 0)
+                    {
+                        Clients.Client(opponentId).AddMove(point, currGame.zerosMove);
+                        Clients.Caller.AddMove(point, currGame.zerosMove);
+                    }
+                    else if (moveResult[1] == 0)
+                    {
+                        Clients.Caller.FinishGame("Draw", point, currGame.zerosMove);
+                        Clients.Client(opponentId).FinishGame("Draw", point, currGame.zerosMove);
+                    }
+                    else
+                    {
+                        Clients.Caller.FinishGame("You win", point, currGame.zerosMove);
+                        Clients.Client(opponentId).FinishGame("You lose", point, currGame.zerosMove);
+                    }
                 }
             }
+            catch (Exception){}            
         }
 
         public override Task OnDisconnected(bool stopCalled)

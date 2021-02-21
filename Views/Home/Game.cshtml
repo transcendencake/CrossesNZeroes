@@ -49,13 +49,12 @@
             var mainHub = $.connection.gameHub;
 
             mainHub.client.addMove = function (point, zero) {
-                var newValue = zero ? "X" : "O";
-                console.log(zero + newValue);
-                var but = $('button[id="' + point + '"]').get()[0];
-                
-                but.textContent = newValue;
-                console.log(but);
+                changeButton(point, zero ? 'X' : 'O');
                 //.setAttribute("value", newValue);
+            };
+            mainHub.client.finishGame = function (message, point, zero) {
+                changeButton(point, zero ? 'X' : 'O');
+                alert(message);
             };
 
             $.connection.hub.start().done(function () {
@@ -66,6 +65,9 @@
                 });
                 console.log("connected");
             });            
+            function changeButton(point, symbol) {
+                $('button[id="' + point + '"]').get()[0].textContent = symbol;
+            }
         })
            
     </script>
