@@ -55,7 +55,7 @@
             mainHub.client.finishGame = function (message, point, zero) {
                 changeButton(point, zero ? 'X' : 'O');
                 alert(message);
-                window.location.href = "/Home";
+                document.location.href = "/Home";
             };
 
             $.connection.hub.start().done(function () {

@@ -1,6 +1,58 @@
-.gameBut{
-	width: 50px;
-	height: 50px;
-	font-size: 20px;
+.gameBut {
+	width: 70px;
+	height: 70px;
+	font-size: 50px;
 	margin-left: 2px;
+	margin-bottom: 2px;
+	border: none;
+	background-color: #E0F2FF;
+	border-color: #2B4CCE;
+	border-style: solid;
+	border-width: 5px;
+}
+
+.bt {
+	border: none;
+	background-color: #6FF58A;
+	width: 20%;
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+.bt:hover {
+	background-color: #BCFAC8;
+	color: #0C7216;
+	transition: 0.4s;
+}
+
+.tags-search {
+	width: 20%;
+	font-style: italic;
+	text-align: left;
+}
+
+#or {
+	margin-left: 8%;
+}
+
+.joiner {
+	width: 60px;
+	height: 60px;
+	border: none;
+	margin-left: 3px;
+	background-color: #CCD3FE;
+}
+
+.joiner:hover {
+	background-color: #E0F2FF;
+	color: #2B4CCE;
+	transition: 0.4s;
+}
+
+#name {
+	border-color: #E5E5E5;
+	border-style: solid;
+	border-width: 1px;
+	height: 35px;
+	text-align: center;
 }

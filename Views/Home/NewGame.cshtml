@@ -14,23 +14,17 @@
 <body>
 
     <input type="hidden" id="customInput" value="@ViewBag.tags" />
-    <table>
+
         @using (Html.BeginForm("Game", "Home", FormMethod.Post))
         {
-            <tr>
-                <td><p>Enter game name</p></td>
-                <td><input name='name' class='tags-search' placeholder='Write name'/> </td>
-            </tr>
-            <tr>
-                <td><p>Enter game tags</p></td>
-                <td><input name='tags' class='tags-search' placeholder='Write tags'/> </td>
-            </tr>
-            <tr>
-                <td><input type="submit" value="Start new game" /> </td>
-                <td></td>
-            </tr>
+                <input id="name" name='name' class='tags-search' placeholder='Enter game name'/>
+
+                <input name='tags' class='tags-search' placeholder='Enter game tags'/>
+           
+                <input class="bt" type="submit" value="Start new game" />
+    
         }
-    </table>
+
 
 
     <script src="~/Scripts/jquery-3.4.1.min.js"></script>
