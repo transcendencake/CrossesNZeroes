@@ -9,23 +9,26 @@ namespace WebApplication1.Controllers
 {
     public class HomeController : Controller
     {
-        [HttpGet]
-        public ActionResult Index()
-        {
-            GamesListModel.AddTags(new string[] { "tag1", "tag2"});
-            var tags = String.Join(",",GamesListModel.Tags);
-            ViewBag.tags = tags;
-            var availbleGames = String.Join(",", GamesListModel.AvailibleGames);
-            ViewBag.availibleGames = availbleGames;
-            System.Diagnostics.Debug.WriteLine(availbleGames);
-            return View();
-        }
-
-        [HttpPost]
         public ActionResult Index(string tags)
         {
+            string availibleGames;
+            if (String.IsNullOrEmpty(tags)) {
+                GamesListModel.AddTags(new string[] { "BestGameEver", "PromotedTag" });                
+                availibleGames = String.Join(",", GamesListModel.AvailibleGames);
+            }
+            else
+            {
+                var tagsArr = NormalizeTags(tags);
+                System.Diagnostics.Debug.WriteLine(String.Join(",", tagsArr));
+                // System.Diagnostics.Debug.WriteLine();
+                availibleGames = String.Join(",", GamesListModel.GetAvailibleGamesByTag(tagsArr));
+            }
+            var usedTags = String.Join(",", GamesListModel.Tags);
+            ViewBag.tags = usedTags;
+            System.Diagnostics.Debug.WriteLine("av games:" + availibleGames);
+            ViewBag.availibleGames = availibleGames;
             return View();
-        }
+        } 
 
         [HttpGet]
         public ActionResult NewGame()
@@ -37,13 +40,19 @@ namespace WebApplication1.Controllers
 
         [HttpPost]
         public ActionResult Game(string name, string tags)
-        {
+        {            
             System.Diagnostics.Debug.WriteLine(tags);
-            var tagsArr = tags.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+            var tagsArr = NormalizeTags(tags);
             GamesListModel.AddTags(tagsArr);
-            GamesListModel.games.Add(new GamesListElemModel(){ GameName = name, Tags = tagsArr.ToList()});
+            foreach (var item in tagsArr)
+            {
+                System.Diagnostics.Debug.WriteLine("tagsArr: " + item);
+            }
+            var tagsList = tagsArr.Cast<string>().ToList();
+            GamesListModel.games.Add(new GamesListElemModel(){ GameName = name, Tags = tagsList});
             System.Diagnostics.Debug.WriteLine(GamesListModel.games);
             ViewBag.gameName = name;
+            GamesListModel.LogTags();
             return View();
         }
 
@@ -53,6 +62,19 @@ namespace WebApplication1.Controllers
             ViewBag.gameName = name;
             return View("Game");
         }
+
+        private string[] NormalizeTags(string tags)
+        {
+            var tagsArr = tags.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+            var result = new string[tagsArr.Length];
+            for (int i = 0; i < tagsArr.Length; i++)
+            {
+                result[i] = tagsArr[i].Split('"')[3];
+            }
+            System.Diagnostics.Debug.WriteLine(result);
+            return result;
+        }
+
 
     }
 }
