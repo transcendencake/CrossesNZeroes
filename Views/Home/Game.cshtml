@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="~/Content/style.css">
 </head>
 <body>
+    <input type="hidden" id="customInput" value="@ViewBag.gameName" />
     <div>
         <table>
             <tr>
@@ -39,9 +40,34 @@
 
     <script src="~/Scripts/jquery-3.4.1.min.js"></script>
     <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
-    <script src="~/signalr/hubs"></script>
+    <script src="/signalr/hubs"></script>
     <script>
+        $(function () {
+            var gameName = $("#customInput")[0].getAttribute("value");
+            console.log(gameName);
+            console.log($.connection);
+            var mainHub = $.connection.gameHub;
 
+            mainHub.client.addMove = function (point, zero) {
+                var newValue = zero ? "X" : "O";
+                console.log(zero + newValue);
+                var but = $('button[id="' + point + '"]').get()[0];
+                
+                but.textContent = newValue;
+                console.log(but);
+                //.setAttribute("value", newValue);
+            };
+
+            $.connection.hub.start().done(function () {
+                mainHub.server.connect(gameName);
+                $('.gameBut').on("click", function (evt) {
+                    var point = evt.target.getAttribute('id').split(',');
+                    mainHub.server.makeMove(point[0], point[1], gameName);
+                });
+                console.log("connected");
+            });            
+        })
+           
     </script>
 </body>
 </html>

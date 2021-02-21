@@ -55,7 +55,7 @@
 
         function JoinHandler(item) {
             var itemName = item.target.value;
-            window.location.href = "/Home/JoinGame/" + itemName;
+            window.location.href = "/Home/JoinGame?name=" + itemName;
         }
 
         if (gamesToOutput[0] != "") for (let item of gamesToOutput)

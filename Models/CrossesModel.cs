@@ -15,9 +15,9 @@ namespace WebApplication1.Models
         private int maxMoves;
         public string zeroId { get; set; }
         public string crossId { get; set; }
-        private bool zerosMove;
+        public bool zerosMove;
 
-        private int[,] gameField;
+        public int[,] gameField;
         public CrossesModel()
         {
             maxMoves = lineLength * lineLength;
@@ -38,7 +38,7 @@ namespace WebApplication1.Models
                 || (gameField[row,column] != EMPTY)) return result;
             gameField[row, column] = zerosMove ? ZERO : CROSS;
             result[0] = 1;
-            result[2] = CheckMove(zerosMove ? ZERO : CROSS, row, column);
+            result[1] = CheckMove(zerosMove ? ZERO : CROSS, row, column);
             zerosMove = !zerosMove;
             return result;
         }
@@ -56,7 +56,7 @@ namespace WebApplication1.Models
                 if (gameField[x, i] == player) row++;
                 if (gameField[i, y] == player) col++;
                 if (gameField[i, i] == player) diag++;
-                if (gameField[i, lineLength - i] == player) rdiag++;
+                if (gameField[i, lineLength - i - 1] == player) rdiag++;
             }
             if (row == lineLength || col == lineLength || diag == lineLength || rdiag == lineLength) return 1;
             return maxMoves == 0 ? 0 : -1;

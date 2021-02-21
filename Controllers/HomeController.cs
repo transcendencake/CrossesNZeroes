@@ -47,7 +47,6 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        [HttpPost]
         public ActionResult JoinGame(string name)
         {
             System.Diagnostics.Debug.WriteLine("JoinGame " + name);
