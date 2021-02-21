@@ -1,0 +1,74 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>SomeView</title>
+    <link rel="stylesheet" href="~/Content/style.css">
+    <link rel="stylesheet" href="~/Content/tagify.css">
+</head>
+<body>
+
+    <input type="hidden" id="customInput" value="@ViewBag.tags" />
+    <input type="hidden" id="customInput2" data-value="@ViewBag.availibleGames" />
+    <table>
+        <tr>
+            <td><input type="button" onclick="location.href='@Url.Action("NewGame", "Home")'" value="Create new game"></td>
+        </tr>
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+        {
+            <tr>
+                <td><p>Filter game by tags </p></td>
+                <td><input name='tags' class='tags-search' placeholder='write some tags' value='' /> </td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Update" /> </td>
+                <td></td>
+            </tr>
+        }
+    </table>
+
+
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/tagify.min.js"></script>
+    <script>
+        var tags = $("#customInput")[0].getAttribute("value");
+        console.log(tags);
+        var input = document.querySelector('input[name="tags"]'),
+            // init Tagify script on the above inputs
+            tagify = new Tagify(input, {
+                whitelist: tags.split(','), //
+                maxTags: 10,
+                dropdown: {
+                    maxItems: 20,           // <- mixumum allowed rendered suggestions
+                    classname: "tags-look", // <- custom classname for this dropdown, so it could be targeted
+                    enabled: 0,             // <- show suggestions on focus
+                    closeOnSelect: false    // <- do not hide the suggestions dropdown once an item has been selected
+                }
+            })
+        var gamesToOutput = $("#customInput2").data("value");
+        console.log(gamesToOutput);
+        gamesToOutput = gamesToOutput.split(',');
+
+        function JoinHandler(item) {
+            var itemName = item.target.value;
+            window.location.href = "/Home/JoinGame/" + itemName;
+        }
+
+        if (gamesToOutput[0] != "") for (let item of gamesToOutput)
+        {
+            var element = document.createElement('input');
+            element.setAttribute('type', 'button');
+            element.setAttribute('class', 'joiner');
+            element.value = item;
+            element.onclick = JoinHandler;
+            document.querySelector('table').append(element);
+        }
+
+
+    </script>
+</body>
+</html>

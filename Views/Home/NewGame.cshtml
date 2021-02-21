@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.Title = "NewGame";
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>SomeView</title>
+    <link rel="stylesheet" href="~/Content/style.css">
+    <link rel="stylesheet" href="~/Content/tagify.css">
+</head>
+<body>
+
+    <input type="hidden" id="customInput" value="@ViewBag.tags" />
+    <table>
+        @using (Html.BeginForm("Game", "Home", FormMethod.Post))
+        {
+            <tr>
+                <td><p>Enter game name</p></td>
+                <td><input name='name' class='tags-search' placeholder='Write name'/> </td>
+            </tr>
+            <tr>
+                <td><p>Enter game tags</p></td>
+                <td><input name='tags' class='tags-search' placeholder='Write tags'/> </td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Start new game" /> </td>
+                <td></td>
+            </tr>
+        }
+    </table>
+
+
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/tagify.min.js"></script>
+    <script>
+        var tags = $("#customInput")[0].getAttribute("value");
+        console.log(tags);
+        var input = document.querySelector('input[name="tags"]'),
+            // init Tagify script on the above inputs
+            tagify = new Tagify(input, {
+                whitelist: tags.split(','), //
+                maxTags: 10,
+                dropdown: {
+                    maxItems: 20,           // <- mixumum allowed rendered suggestions
+                    classname: "tags-look", // <- custom classname for this dropdown, so it could be targeted
+                    enabled: 0,             // <- show suggestions on focus
+                    closeOnSelect: false    // <- do not hide the suggestions dropdown once an item has been selected
+                }
+            })
+    </script>
+</body>
+</html>
